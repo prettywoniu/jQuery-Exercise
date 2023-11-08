@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movies App</title>
+  <style>
+    .sort-btn{
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <form>
+      <lable>Movie Name: <input type='text' id='name' minlength="2"></lable>
+      <lable>Movie Rating: <input type='number' id='rating' min="0" max="10"></lable>
+      <button id='submit-btn'>Submit</button>
+    </form>
+    <div class="sort-btn">
+      <button id="sort-name">Sort by Name</button>
+      <button id="'sort-rating">Sort by Rating</button>
+    </div>
+  </div>
+  <ul id="movies-list"></ul>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script>
+    $('form').on('click', '#submit-btn', function(e) {
+      e.preventDefault();
+      //??? what if movie name is all spaces???
+      if($('#rating').val().length < 1 || $('#name').val().length < 1) {
+        alert('Movie Name and Rating should be given!');
+      } else {
+        if($('#name').val().length < 2) {
+          alert('Movie Name is more than 2 characters!')
+        } else {
+          let input = $('#name').val() + ' ' + $('#rating').val();
+          $('ul').append('<li>' + input + ' <button class="rmv-btn">X</button></li>');
+          $('#name').val('');
+          $('#rating').val('');
+        }
+      }  
+    });
+
+    //need to use event delegation
+    $('ul').on('click', '.rmv-btn', function(e) {
+      $(this).parent('li').remove();  
+    });
+
+    //???? how to sort by name and rating
+    $('#sort-name').on('click', function() {
+      let names = $('li');
+      console.log(names);
+    })
+  </script>
+</body>
