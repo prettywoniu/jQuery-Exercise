@@ -17,8 +17,8 @@
       <button id='submit-btn'>Submit</button>
     </form>
     <div class="sort-btn">
-      <button id="sort-name">Sort by Name</button>
-      <button id="'sort-rating">Sort by Rating</button>
+      <button id="sort-by-name">Sort by Name</button>
+      <button id="sort-by-rating">Sort by Rating</button>
     </div>
   </div>
   <ul id="movies-list"></ul>
@@ -33,8 +33,9 @@
         if($('#name').val().length < 2) {
           alert('Movie Name is more than 2 characters!')
         } else {
-          let input = $('#name').val() + ' ' + $('#rating').val();
-          $('ul').append('<li>' + input + ' <button class="rmv-btn">X</button></li>');
+          let nameHtml = '<span class="movie-name">' + $('#name').val() + '</span>';
+          let ratingHtml = '<span class="movie-rating">' + $('#rating').val() + '</span>';
+          $('ul').append('<li>' + nameHtml + ' ' + ratingHtml + ' <button class="rmv-btn">X</button></li>');
           $('#name').val('');
           $('#rating').val('');
         }
@@ -46,10 +47,51 @@
       $(this).parent('li').remove();  
     });
 
-    //???? how to sort by name and rating
-    $('#sort-name').on('click', function() {
-      let names = $('li');
-      console.log(names);
+    //Sort by name
+    $('#sort-by-name').on('click', function() {
+      let names = $('.movie-name');
+      let arr = [];
+      for (let i = 0; i < names.length; i++) {
+        arr.push(names[i].innerText + '#' + names[i].nextElementSibling.innerText);
+      }
+      
+      arr.sort(function(s1, s2){
+        var l=s1.toLowerCase(), m=s2.toLowerCase();
+        return l===m?0:l>m?1:-1;
+      });
+    
+      $('li').remove();
+      
+      for (let i = 0; i < arr.length; i++) {
+        let splits = arr[i].split('#');
+        nameHtml = '<span class="movie-name">' + splits[0] + '</span>';
+        ratingHtml = '<span class="movie-rating">' + splits[1] + '</span>';
+        $('ul').append('<li>' + nameHtml + ' ' + ratingHtml + ' <button class="rmv-btn">X</button></li>');
+      }
+    })
+
+    //Sort by rating
+    $('#sort-by-rating').on('click', function() {
+      let names = $('.movie-name');
+      let arr = [];
+      for (let i = 0; i < names.length; i++) {
+        arr.push(names[i].nextElementSibling.innerText + '#' + names[i].innerText);
+      }
+
+      arr.sort(function(s1, s2){
+        var l=s1.toLowerCase(), m=s2.toLowerCase();
+        return l===m?0:l>m?1:-1;
+      });
+      arr.reverse();
+
+      $('li').remove();
+      
+      for (let i = 0; i < arr.length; i++) {
+        let splits = arr[i].split('#');
+        nameHtml = '<span class="movie-name">' + splits[1] + '</span>';
+        ratingHtml = '<span class="movie-rating">' + splits[0] + '</span>';
+        $('ul').append('<li>' + nameHtml + ' ' + ratingHtml + ' <button class="rmv-btn">X</button></li>');
+      }
     })
   </script>
 </body>
